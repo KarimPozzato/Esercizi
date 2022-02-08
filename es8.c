@@ -3,7 +3,7 @@
 
 main (int argc, char * argv[])
 {
-    int a, n conta = 0;
+    int a, n, conta = 0;
     double somma;
     
     do
