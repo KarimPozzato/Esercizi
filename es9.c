@@ -3,7 +3,7 @@
 int main (int argc, char * argv[])
 {
     int a , b, c;
-    int min = 0, max = 0;
+    int min = INT_MAX, max = 0;
 
     do
     {
@@ -19,7 +19,7 @@ int main (int argc, char * argv[])
             if (a < min)
                 min = a;
 
-            else 
+            if (c > max) 
                 max = c;
         }
 
