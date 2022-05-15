@@ -29,13 +29,13 @@ int main(int argc, char *argv[])
     for(int i = 0; i < DIM2; i++)
     {
         if(calciatori[i].nome[0] == 'c')
-            printf("\t%s\n", calciatori[i].nome);
+            printf("%s\n", calciatori[i].nome);
     }
 
     printf("Giocatori che giocano nel milan");
     for(int i = 0; i < DIM2; i++)
     {
         if(calciatori[i].squadra == "milan")
-            printf("\t%s\n", calciatori[i].nome);
+            printf("%s\n", calciatori[i].nome);
     }
 }
