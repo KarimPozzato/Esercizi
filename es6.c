@@ -1,35 +1,65 @@
 #include <stdio.h>
+#include <unistd.h>
+#include <stdlib.h>
+#include <fcntl.h>
+#include <string.h>
+#define DIM 100
 
-int main (int argc, char * argv[])
+// 1/3/2023
+
+int main(int argc, char *argv[])
 {
-    int a, b, c;
-    int somma = 0;
-    int contatore = 0;
-    double media;
-
-    do
+    if (argc != 2)
     {
-        printf("Inserisci A\n");
-        scanf("%d", & a);
-        printf("Inserisci B\n");
-        scanf("%d", & b);
-    } while (b < a);
+        printf("Numero sbagliato di argomenti");
+    }
 
-    do
+    int pid;
+    int p1p0[1];
+    int p2p0[2];
+    char buffer[1];
+    char contenitore[DIM];
+
+    pid = fork();
+    pipe(p1p0);
+
+    if (pid == 0)
     {
-        printf("Inserisci terzo numero: C\n");
-        scanf("%d", & c);
+        // scriviamo nella pipe il contenuto del file
+        close(p1p0[0]);
+        close(1);
+        dup(p1p0[1]);
+        close(p1p0[1]);
+        execl("//bin/cat", "cat", argv[1], NULL);
+        return -1;
+    }
 
-        if (a <= c && b <= c)
-        {
-            somma = somma + c;
-            contatore++;
-        }
+    pid = fork();
+    pipe(p2p0);
 
-    } while (a <= c && b <= c);
-    
-    media = (double)somma / (double)contatore;
-    printf("La media è: %f\n", media);
+    if (pid == 0)
+    {
+        // Leggiamo dalla pipe il suo contenuto
+        close(p1p0[1]);
+        close(0);
+        dup(p1p0[0]);
+        close(p1p0[0]);
+        
+        //E lo scriviamo nella nuova pipe
+        close(p2p0[0]);
+        close(1);
+        dup(p2p0[1]);
+        close(p2p0[1]);
+        execl("//bin/awk", "awk", "{print $3}", NULL);
+
+        return -1;
+    }
+
+    close(p1p0[0]);
+    close(p1p0[1]);
+    close(p2p0[1]);
+
+    strncat(contenitore, &buffer[0], sizeof(buffer[0]));
 
     return 0;
 
